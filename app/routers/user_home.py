@@ -1,21 +1,29 @@
-from fastapi import APIRouter, HTTPException, Depends, Request
-from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi import status
+from fastapi import Request
+from fastapi.responses import HTMLResponse
+
 from app.dependencies.session import SessionDep
-from app.dependencies.auth import AuthDep, IsUserLoggedIn, get_current_user, is_admin
+from app.dependencies.auth import StudentDep
+from app.repositories.volunteer_hours import VolunteerHoursRepository
+from app.services.volunteer_hours_service import VolunteerHoursService
 from . import router, templates
 
 
 @router.get("/app", response_class=HTMLResponse)
 async def user_home_view(
     request: Request,
-    user: AuthDep,
-    db:SessionDep
+    user: StudentDep,
+    db: SessionDep,
 ):
+    service = VolunteerHoursService(VolunteerHoursRepository(db))
+    entries, verified_hours, pending_hours = service.get_hours_overview(user.id)
     return templates.TemplateResponse(
-        request=request, 
-        name="app.html",
+        request=request,
+        name="my_hours.html",
         context={
-            "user": user
-        }
+            "user": user,
+            "entries": entries,
+            "verified_hours": verified_hours,
+            "pending_hours": pending_hours,
+            "progress_target": 50,
+        },
     )

@@ -1,0 +1,35 @@
+{% extends "authenticated-base.html" %}
+{% block title %}Log Volunteer Hours{% endblock %}
+
+{% block subpage_content %}
+<main class="hours-page">
+  <h1 class="h3 mb-3">Log Volunteer Hours</h1>
+
+  <form class="hours-form" method="post" action="{{ url_for('submit_volunteer_hours') }}">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label" for="entry_date">Date</label>
+        <input class="form-control" type="date" id="entry_date" name="entry_date" required>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="hours">Hours</label>
+        <input class="form-control" type="number" id="hours" name="hours" min="0.1" step="0.1" placeholder="e.g. 2.5" required>
+      </div>
+      <div class="col-12">
+        <label class="form-label" for="description">Description</label>
+        <textarea class="form-control" id="description" name="description" placeholder="What did you do?" required></textarea>
+      </div>
+      <div class="col-12">
+        <label class="form-label" for="supervisor">Supervisor / organisation (optional)</label>
+        <input class="form-control" type="text" id="supervisor" name="supervisor" placeholder="e.g. Community Food Bank">
+      </div>
+    </div>
+
+    <p class="text-muted mt-3 mb-4">Your hours will be marked Pending until a teacher verifies them.</p>
+    <div class="d-flex flex-wrap gap-2">
+      <button class="btn btn-primary" type="submit">Submit Hours</button>
+      <a class="btn btn-outline-secondary" href="{{ url_for('user_home_view') }}">Cancel</a>
+    </div>
+  </form>
+</main>
+{% endblock %}

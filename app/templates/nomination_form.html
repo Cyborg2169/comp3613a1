@@ -1,0 +1,48 @@
+{% extends "authenticated-base.html" %}
+{% block title %}Nominate Student{% endblock %}
+
+{% block subpage_content %}
+<main class="hours-page">
+  <h1 class="h3 mb-3">Nominate Student</h1>
+  {% if error %}
+  <div class="alert alert-danger" role="alert">{{ error }}</div>
+  {% endif %}
+
+  <form class="hours-form" method="post" action="{{ url_for('nomination_submit_action') }}">
+    <input type="hidden" name="student_id" value="{{ student.id }}">
+    <div class="mb-3">
+      <label class="form-label" for="student_display">Student</label>
+      <select class="form-select" id="student_display" disabled>
+        <option selected>{{ student.username }}</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label" for="category_id">Award Category (required)</label>
+      <select class="form-select" id="category_id" name="category_id" required>
+        {% for option in eligible_categories %}
+        <option value="{{ option.id }}" {% if option.id == category.id %}selected{% endif %}>
+          {{ option.name }}
+        </option>
+        {% endfor %}
+      </select>
+      <div class="form-text">
+        Selected category requires {{ category.required_hours }} verified hours.
+        Student has {{ "%.1f"|format(verified_hours) }}.
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <label class="form-label" for="reason">Reason for Nomination</label>
+      <textarea class="form-control" id="reason" name="reason" minlength="1"
+                placeholder="Explain why this student deserves the award" required></textarea>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2">
+      <button class="btn btn-primary" type="submit">Submit Nomination</button>
+      <a class="btn btn-outline-secondary"
+         href="{{ url_for('nomination_category_view', student_id=student.id) }}">Cancel</a>
+    </div>
+  </form>
+</main>
+{% endblock %}

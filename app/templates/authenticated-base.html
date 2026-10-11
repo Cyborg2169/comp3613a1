@@ -4,7 +4,7 @@
 <style>
     body {
         overflow-x: hidden;
-        background: #f4f6f8;
+        background: var(--brand-bg);
     }
 
     #wrapper {
@@ -50,11 +50,11 @@
         transition: all 0.3s;
         display: flex;
         flex-direction: column;
-        background-color: #f4f6f8;
+        background-color: var(--brand-bg);
     }
 
     .navbar {
-        border-bottom: 1px solid #dee2e6;
+        border-bottom: 1px solid color-mix(in srgb, var(--brand-ink) 12%, transparent);
     }
 </style>
 {% block additional_styles %}{% endblock %}
@@ -63,16 +63,41 @@
 {% block content %}
 <div id="wrapper">
     <nav id="sidebar" class="p-3 d-flex flex-column vh-100">
-        <div class="brand-wordmark">FastStarter</div>
+        <div class="brand-wordmark">Student Awards</div>
 
         <ul class="nav nav-pills flex-column gap-2 flex-grow-1">
+            {% if user.role == "regular_user" %}
             <li class="nav-item">
                 <a class="nav-link d-flex align-items-center {{ 'active' if request.url.path.startswith('/app') }}"
                    href="{{ url_for('user_home_view') }}">
                     <span class="material-symbols-outlined me-2">home</span>
-                    Home
+                    My Hours
                 </a>
             </li>
+            {% elif user.role == "teacher" %}
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center {{ 'active' if request.url.path.startswith('/teacher/hours') }}"
+                   href="{{ url_for('teacher_pending_hours_view') }}">
+                    <span class="material-symbols-outlined me-2">fact_check</span>
+                    Verify Hours
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center {{ 'active' if request.url.path.startswith('/teacher/nominations') }}"
+                   href="{{ url_for('teacher_nominations_view') }}">
+                    <span class="material-symbols-outlined me-2">workspace_premium</span>
+                    Nominate Students
+                </a>
+            </li>
+            {% elif user.role == "admin" %}
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center {{ 'active' if request.url.path.startswith('/admin/categories') }}"
+                   href="{{ url_for('admin_categories_view') }}">
+                    <span class="material-symbols-outlined me-2">workspace_premium</span>
+                    Award Categories
+                </a>
+            </li>
+            {% endif %}
             <li class="nav-item mt-auto">
                 <a class="nav-link d-flex align-items-center text-danger" href="{{ url_for('logout') }}">
                     <span class="material-symbols-outlined me-2">logout</span>

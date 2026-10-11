@@ -1,0 +1,47 @@
+{% extends "authenticated-base.html" %}
+{% block title %}Nominate Student for Award{% endblock %}
+
+{% block subpage_content %}
+<main class="hours-page">
+  <h1 class="h3 mb-3">My Students</h1>
+
+  <form class="row g-2 mb-3" method="get" action="{{ url_for('teacher_nominations_view') }}">
+    <div class="col-sm-8 col-md-5">
+      <label class="visually-hidden" for="query">Search students by username</label>
+      <input class="form-control" type="search" id="query" name="query"
+             value="{{ query }}" placeholder="Search by student username">
+    </div>
+    <div class="col-auto">
+      <button class="btn btn-outline-primary" type="submit">Search</button>
+    </div>
+    {% if query %}
+    <div class="col-auto">
+      <a class="btn btn-outline-secondary" href="{{ url_for('teacher_nominations_view') }}">Clear</a>
+    </div>
+    {% endif %}
+  </form>
+
+  <div class="hours-table-wrap">
+    <table class="table table-bordered table-hover align-middle bg-white">
+      <thead class="table-light">
+        <tr><th>Student</th><th>Verified Hours</th><th>Nominations</th><th>Action</th></tr>
+      </thead>
+      <tbody>
+        {% for student, verified_hours, nomination_count in students %}
+        <tr>
+          <td>{{ student.username }}</td>
+          <td>{{ "%.1f"|format(verified_hours) }}</td>
+          <td>{{ nomination_count }}</td>
+          <td>
+            <a class="btn btn-sm btn-outline-primary"
+               href="{{ url_for('nomination_category_view', student_id=student.id) }}">Nominate</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" class="text-muted text-center py-4">No students found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</main>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "authenticated-base.html" %}
+{% block title %}{{ "Edit" if category_id else "Add" }} Award Category{% endblock %}
+
+{% block subpage_content %}
+<main class="hours-page">
+  <h1 class="h3 mb-3">{{ "Edit" if category_id else "Add" }} Award Category</h1>
+  {% if error %}
+  <div class="alert alert-danger" role="alert">{{ error }}</div>
+  {% endif %}
+
+  <form class="hours-form-card" method="post"
+        action="{{ url_for('update_award_category_action', category_id=category_id) if category_id else url_for('create_award_category_action') }}">
+    <div class="mb-3">
+      <label class="form-label" for="name">Category Name</label>
+      <input class="form-control" id="name" name="name" value="{{ name }}" required maxlength="100">
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="description">Description</label>
+      <textarea class="form-control" id="description" name="description" rows="4">{{ description }}</textarea>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="required_hours">Required Hours</label>
+      <input class="form-control" id="required_hours" name="required_hours" type="number"
+             min="1" step="1" value="{{ required_hours }}" required>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-primary" type="submit">Save Category</button>
+      <a class="btn btn-outline-secondary" href="{{ url_for('admin_categories_view') }}">Cancel</a>
+    </div>
+  </form>
+</main>
+{% endblock %}

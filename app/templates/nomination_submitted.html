@@ -1,0 +1,42 @@
+{% extends "authenticated-base.html" %}
+{% block title %}Nomination Submitted{% endblock %}
+
+{% block subpage_content %}
+<main class="hours-page">
+  <div class="alert alert-success" role="status">Nomination submitted</div>
+
+  <section class="hours-submission-card mb-4">
+    <div><strong>Student:</strong> {{ student_username }}</div>
+    <div><strong>Award category:</strong> {{ category_name }}</div>
+    <div><strong>Nominated by:</strong> You ({{ user.username }})</div>
+    <div><strong>Date:</strong> {{ nomination.date.isoformat() }}</div>
+    <div><strong>Reason:</strong> {{ nomination.reason }}</div>
+    <div class="mt-2"><strong>Status:</strong> {{ nomination.status|title }}</div>
+  </section>
+
+  <div class="d-flex justify-content-between align-items-center gap-3 mb-2">
+    <h2 class="h5 mb-0">My Nominations</h2>
+    <a class="btn btn-outline-primary" href="{{ url_for('teacher_nominations_view') }}">Nominate Another</a>
+  </div>
+
+  <div class="hours-table-wrap">
+    <table class="table table-bordered table-hover align-middle bg-white">
+      <thead class="table-light">
+        <tr><th>Student</th><th>Category</th><th>Date</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        {% for submitted, nominated_student, award_category in nominations %}
+        <tr>
+          <td>{{ nominated_student }}</td>
+          <td>{{ award_category }}</td>
+          <td>{{ submitted.date.isoformat() }}</td>
+          <td><span class="badge text-bg-primary">{{ submitted.status|title }}</span></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" class="text-muted text-center py-4">No nominations submitted yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</main>
+{% endblock %}

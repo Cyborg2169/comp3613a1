@@ -14,6 +14,9 @@ class AdminCreate(UserBase):
 class RegularUserCreate(UserBase):
     role:str = "regular_user"
 
+class TeacherCreate(UserBase):
+    role: str = "teacher"
+
 class UserResponse(SQLModel):
     id: int
     username:str

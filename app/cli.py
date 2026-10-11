@@ -49,12 +49,15 @@ def cmd_init(args: argparse.Namespace) -> None:
 def cmd_seed(args: argparse.Namespace) -> None:
     """Insert demo users.
 
-    bob / bobpass       (regular_user)
-    admin / adminpass   (admin)
+    bob / bobpass             (regular_user)
+    admin / adminpass         (admin)
+    teacher / teacherpass     (teacher)
     """
     from app.database import ensure_db_and_tables, get_cli_session
+    from app.models.award_category import AwardCategory
     from app.repositories.user import UserRepository
-    from app.schemas.user import AdminCreate, RegularUserCreate
+    from app.repositories.award_category import AwardCategoryRepository
+    from app.schemas.user import AdminCreate, RegularUserCreate, TeacherCreate
     from app.utilities.security import encrypt_password
 
     _ensure_models_loaded()
@@ -63,6 +66,7 @@ def cmd_seed(args: argparse.Namespace) -> None:
     demo_users = [
         ("bob", "bob@example.com", "bobpass", "regular_user"),
         ("admin", "admin@example.com", "adminpass", "admin"),
+        ("teacher", "teacher@example.com", "teacherpass", "teacher"),
     ]
 
     created = 0
@@ -74,7 +78,10 @@ def cmd_seed(args: argparse.Namespace) -> None:
                 print(f"  skip  {username} (already exists)")
                 skipped += 1
                 continue
-            payload_cls = AdminCreate if role == "admin" else RegularUserCreate
+            payload_cls = {
+                "admin": AdminCreate,
+                "teacher": TeacherCreate,
+            }.get(role, RegularUserCreate)
             repo.create(
                 payload_cls(
                     username=username,
@@ -86,8 +93,33 @@ def cmd_seed(args: argparse.Namespace) -> None:
             print(f"  create {username} ({role})")
             created += 1
 
+    category_created = 0
+    default_categories = [
+        ("Bronze Service", "Getting started", 20),
+        ("Silver Service", "Strong volunteering", 50),
+        ("Gold Service", "Outstanding volunteering", 100),
+    ]
+    with get_cli_session() as session:
+        category_repo = AwardCategoryRepository(session)
+        for name, description, required_hours in default_categories:
+            existing = category_repo.get_by_name(name)
+            if existing:
+                if not existing.description:
+                    existing.description = description
+                    category_repo.update(existing)
+                continue
+            category_repo.create(
+                AwardCategory(
+                    name=name,
+                    description=description,
+                    required_hours=required_hours,
+                )
+            )
+            category_created += 1
+
     print(f"Seed done — created {created}, skipped {skipped}.")
-    print("Login with bob/bobpass or admin/adminpass")
+    print(f"Seeded {category_created} default award categor(ies).")
+    print("Login with bob/bobpass, teacher/teacherpass, or admin/adminpass")
 
 
 def cmd_run(args: argparse.Namespace) -> None:

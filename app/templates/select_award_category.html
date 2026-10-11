@@ -1,0 +1,44 @@
+{% extends "authenticated-base.html" %}
+{% block title %}Select Award Category{% endblock %}
+
+{% block subpage_content %}
+<main class="hours-page">
+  <h1 class="h3 mb-2">Select an award category for {{ student.username }}</h1>
+  <p class="text-muted mb-4">{{ "%.1f"|format(verified_hours) }} verified hours</p>
+
+  {% if error %}
+  <div class="alert alert-danger" role="alert">{{ error }}</div>
+  {% endif %}
+
+  <form method="post" action="{{ url_for('nomination_choose_category_action') }}">
+    <input type="hidden" name="student_id" value="{{ student.id }}">
+    <fieldset>
+      <legend class="visually-hidden">Eligible award categories</legend>
+      {% for category, eligible in category_options %}
+      <label class="category-option d-flex align-items-center gap-3 mb-2 {{ 'category-option-disabled' if not eligible }}">
+        <input type="radio" name="category_id" value="{{ category.id }}"
+               {% if not eligible %}disabled{% else %}required{% endif %}>
+        <span>
+          <strong>{{ category.name }}</strong>
+          <span>— {{ category.required_hours }} hrs required</span>
+          <span class="category-eligibility {{ 'text-success' if eligible else 'text-muted' }}">
+            — {{ "eligible" if eligible else "not eligible yet" }}
+          </span>
+        </span>
+      </label>
+      {% else %}
+      <p class="text-muted">No award categories are available.</p>
+      {% endfor %}
+    </fieldset>
+
+    <p class="text-muted mt-3">A category is required before the nomination can be submitted.</p>
+    <div class="d-flex flex-wrap gap-2 mt-4">
+      <button class="btn btn-primary" type="submit"
+              {% if not has_eligible %}disabled{% endif %}>
+        Confirm Category
+      </button>
+      <a class="btn btn-outline-secondary" href="{{ url_for('teacher_nominations_view') }}">Cancel</a>
+    </div>
+  </form>
+</main>
+{% endblock %}

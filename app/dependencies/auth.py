@@ -53,3 +53,23 @@ async def is_admin_dep(user: AuthDep):
     return user
 
 AdminDep = Annotated[User, Depends(is_admin_dep)]
+
+async def is_teacher_dep(user: AuthDep):
+    if user.role != "teacher":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Teacher access is required",
+        )
+    return user
+
+TeacherDep = Annotated[User, Depends(is_teacher_dep)]
+
+async def is_student_dep(user: AuthDep):
+    if user.role != "regular_user":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Student access is required",
+        )
+    return user
+
+StudentDep = Annotated[User, Depends(is_student_dep)]

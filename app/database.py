@@ -3,6 +3,7 @@ import threading
 import time
 from contextlib import contextmanager
 
+from sqlalchemy import inspect
 from sqlalchemy.exc import DBAPIError, OperationalError, ProgrammingError
 from sqlmodel import SQLModel, Session, create_engine
 
@@ -38,6 +39,63 @@ def create_db_and_tables() -> None:
     import app.models  # noqa: F401
 
     SQLModel.metadata.create_all(engine)
+    migrate_volunteer_hours_review_fields()
+    migrate_nomination_schema()
+
+
+def migrate_volunteer_hours_review_fields() -> None:
+    """Add optional verification fields to databases created before the review flow."""
+    with engine.begin() as connection:
+        inspector = inspect(connection)
+        if not inspector.has_table("volunteerhours"):
+            return
+        existing_columns = {
+            column["name"] for column in inspector.get_columns("volunteerhours")
+        }
+        if "review_comment" not in existing_columns:
+            connection.exec_driver_sql(
+                'ALTER TABLE "volunteerhours" ADD COLUMN "review_comment" VARCHAR'
+            )
+        if "reviewed_by_id" not in existing_columns:
+            connection.exec_driver_sql(
+                'ALTER TABLE "volunteerhours" ADD COLUMN "reviewed_by_id" '
+                'INTEGER REFERENCES "user"(id)'
+            )
+
+
+def migrate_nomination_schema() -> None:
+    """Complete a nomination table created while the model snippet was unfinished."""
+    with engine.begin() as connection:
+        inspector = inspect(connection)
+        if not inspector.has_table("nomination"):
+            return
+        existing_columns = {
+            column["name"] for column in inspector.get_columns("nomination")
+        }
+        additions = {
+            "student_id": 'INTEGER REFERENCES "user"(id)',
+            "teacher_id": 'INTEGER REFERENCES "user"(id)',
+            "category_id": 'INTEGER REFERENCES "awardcategory"(id)',
+            "date": "DATE",
+            "reason": "VARCHAR",
+            "status": "VARCHAR DEFAULT 'submitted'",
+        }
+        for name, definition in additions.items():
+            if name not in existing_columns:
+                connection.exec_driver_sql(
+                    f'ALTER TABLE "nomination" ADD COLUMN "{name}" {definition}'
+                )
+
+        constraints = inspect(connection).get_unique_constraints("nomination")
+        if not any(
+            set(constraint.get("column_names") or ())
+            == {"student_id", "category_id"}
+            for constraint in constraints
+        ):
+            connection.exec_driver_sql(
+                'CREATE UNIQUE INDEX IF NOT EXISTS "ux_nomination_student_category" '
+                'ON "nomination" ("student_id", "category_id")'
+            )
 
 
 def drop_all() -> None:

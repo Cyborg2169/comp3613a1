@@ -94,6 +94,9 @@ python manage.py init
 |----------|-------------|--------------|
 | `bob`    | `bobpass`   | regular_user |
 | `admin`  | `adminpass` | admin        |
+| `teacher` | `teacherpass` | teacher |
+
+Seeding also creates the default Bronze (20), Silver (50), and Gold (100) Service award categories if they do not already exist.
 
 Flags:
 

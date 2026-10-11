@@ -1,0 +1,48 @@
+{% extends "authenticated-base.html" %}
+{% block title %}Verify Volunteer Hours{% endblock %}
+
+{% block subpage_content %}
+<main class="hours-page">
+  <h1 class="h3 mb-3">Pending Hours</h1>
+
+  <form class="row g-2 mb-3" method="get" action="{{ url_for('teacher_pending_hours_view') }}">
+    <div class="col-sm-8 col-md-5">
+      <label class="visually-hidden" for="query">Search by student username</label>
+      <input class="form-control" type="search" id="query" name="query"
+             value="{{ query }}" placeholder="Search by student username">
+    </div>
+    <div class="col-auto">
+      <button class="btn btn-outline-primary" type="submit">Search</button>
+    </div>
+    {% if query %}
+    <div class="col-auto">
+      <a class="btn btn-outline-secondary" href="{{ url_for('teacher_pending_hours_view') }}">Clear</a>
+    </div>
+    {% endif %}
+  </form>
+
+  <div class="hours-table-wrap">
+    <table class="table table-bordered table-hover align-middle bg-white">
+      <thead class="table-light">
+        <tr><th>Student</th><th>Date</th><th>Hours</th><th>Description</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+        {% for entry, student_username in entries %}
+        <tr>
+          <td>{{ student_username }}</td>
+          <td>{{ entry.date.isoformat() }}</td>
+          <td>{{ "%.1f"|format(entry.hours) }}</td>
+          <td>{{ entry.description }}</td>
+          <td>
+            <a class="btn btn-sm btn-outline-primary"
+               href="{{ url_for('review_entry_view', entry_id=entry.id) }}">Review</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" class="text-muted text-center py-4">No pending volunteer hours to review.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</main>
+{% endblock %}

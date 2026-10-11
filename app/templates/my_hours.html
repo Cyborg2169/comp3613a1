@@ -1,0 +1,69 @@
+{% extends "authenticated-base.html" %}
+{% block title %}My Volunteer Hours{% endblock %}
+
+{% block subpage_content %}
+<main class="hours-page">
+  <h1 class="h3 mb-3">My Volunteer Hours</h1>
+
+  <section class="hours-summary" aria-label="Hours summary">
+    <div class="hours-summary-card">
+      <div class="text-muted">Verified hours</div>
+      <strong class="fs-4">{{ "%.1f"|format(verified_hours) }} hrs</strong>
+    </div>
+    <div class="hours-summary-card">
+      <div class="text-muted">Pending verification</div>
+      <strong class="fs-4">{{ "%.1f"|format(pending_hours) }} hrs</strong>
+    </div>
+  </section>
+
+  <section class="mb-4" aria-label="Award progress">
+    <div class="d-flex justify-content-between align-items-baseline gap-2 mb-2">
+      <h2 class="h6 mb-0">Progress to Silver Service ({{ progress_target }} hrs)</h2>
+      <span>{{ "%.1f"|format(verified_hours) }} / {{ progress_target }} hrs</span>
+    </div>
+    {% set progress_width = [verified_hours / progress_target * 100, 100]|min %}
+    <div class="hours-progress" role="progressbar"
+         aria-valuenow="{{ progress_width|round|int }}" aria-valuemin="0" aria-valuemax="100">
+      <span style="width: {{ progress_width }}%"></span>
+    </div>
+  </section>
+
+  <div class="d-flex justify-content-between align-items-center gap-3 mb-2">
+    <h2 class="h5 mb-0">My Hours</h2>
+    <a class="btn btn-primary" href="{{ url_for('log_volunteer_hours_view') }}">+ Log New Hours</a>
+  </div>
+
+  <div class="hours-table-wrap">
+    <table class="table table-bordered table-hover align-middle bg-white">
+      <thead class="table-light">
+        <tr><th>Date</th><th>Hours</th><th>Description</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        {% for entry in entries %}
+        <tr>
+          <td>{{ entry.date.isoformat() }}</td>
+          <td>{{ "%.1f"|format(entry.hours) }}</td>
+          <td>
+            {{ entry.description }}
+            {% if entry.review_comment %}
+            <div class="small text-muted mt-1">Teacher note: {{ entry.review_comment }}</div>
+            {% endif %}
+          </td>
+          <td>
+            {% if entry.status == "verified" %}
+            <span class="badge rounded-pill text-bg-success">Verified</span>
+            {% elif entry.status == "rejected" %}
+            <span class="badge rounded-pill text-bg-danger">Rejected</span>
+            {% else %}
+            <span class="badge rounded-pill text-bg-warning">{{ entry.status|title }}</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" class="text-muted text-center py-4">No volunteer hours logged yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</main>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "authenticated-base.html" %}
+{% block title %}Hours Submitted{% endblock %}
+
+{% block subpage_content %}
+<main class="hours-page">
+  <div class="alert hours-success" role="status">Hours submitted successfully</div>
+
+  <section class="hours-submission-card mb-3" aria-label="Submitted volunteer hours">
+    <div><strong>Date:</strong> {{ entry.date.isoformat() }}</div>
+    <div><strong>Hours:</strong> {{ "%.1f"|format(entry.hours) }}</div>
+    <div><strong>Description:</strong> {{ entry.description }}</div>
+    {% if entry.supervisor %}
+    <div><strong>Supervisor / organisation:</strong> {{ entry.supervisor }}</div>
+    {% endif %}
+    <div class="mt-3"><span class="badge text-bg-warning">Pending teacher verification</span></div>
+  </section>
+
+  <p class="text-muted">Once verified, these hours count toward your award categories.</p>
+  <div class="d-flex flex-wrap gap-2">
+    <a class="btn btn-outline-secondary" href="{{ url_for('log_volunteer_hours_view') }}">Log More Hours</a>
+    <a class="btn btn-primary" href="{{ url_for('user_home_view') }}">View My Hours</a>
+  </div>
+</main>
+{% endblock %}

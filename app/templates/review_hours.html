@@ -1,0 +1,35 @@
+{% extends "authenticated-base.html" %}
+{% block title %}Review Volunteer Hours{% endblock %}
+
+{% block subpage_content %}
+<main class="hours-page">
+  <h1 class="h3 mb-3">Review Entry</h1>
+
+  {% if error %}
+  <div class="alert alert-danger" role="alert">{{ error }}</div>
+  {% endif %}
+
+  <section class="hours-submission-card mb-4" aria-label="Volunteer-hour entry details">
+    <div><strong>Student:</strong> {{ student_username }}</div>
+    <div><strong>Date:</strong> {{ entry.date.isoformat() }}</div>
+    <div><strong>Hours:</strong> {{ "%.1f"|format(entry.hours) }}</div>
+    <div><strong>Description:</strong> {{ entry.description }}</div>
+    {% if entry.supervisor %}
+    <div><strong>Supervisor / organisation:</strong> {{ entry.supervisor }}</div>
+    {% endif %}
+    <div class="mt-3"><span class="badge text-bg-warning">{{ entry.status|title }}</span></div>
+  </section>
+
+  <form class="hours-form" method="post"
+        action="{{ url_for('review_volunteer_hours', entry_id=entry.id) }}">
+    <label class="form-label" for="comment">Comment (required if rejecting)</label>
+    <textarea class="form-control" id="comment" name="comment"
+              placeholder="Add a note for the student">{{ comment if comment is not none else (entry.review_comment or "") }}</textarea>
+    <div class="d-flex flex-wrap gap-2 mt-4">
+      <button class="btn btn-success" type="submit" name="decision" value="approve">Approve</button>
+      <button class="btn btn-danger" type="submit" name="decision" value="reject">Reject</button>
+      <a class="btn btn-outline-secondary" href="{{ url_for('teacher_pending_hours_view') }}">Back</a>
+    </div>
+  </form>
+</main>
+{% endblock %}

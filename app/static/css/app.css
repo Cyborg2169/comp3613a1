@@ -1,15 +1,14 @@
 :root {
-  /* Phase 5 theming: Guide overwrites these from docs/report.md preferences */
-  --brand-name: "FastStarter";
-  --brand-bg: #0c1218;
-  --brand-surface: #f7f4ef;
-  --brand-ink: #14202b;
-  --brand-muted: #6a7a88;
-  --brand-accent: #c45c26;
-  --brand-accent-2: #2a6f6b;
-  --brand-sidebar: #14202b;
-  --brand-sidebar-text: #a8b4bf;
-  --brand-font-display: "Fraunces", Georgia, serif;
+  --brand-name: "Student Awards";
+  --brand-bg: #edf7f2;
+  --brand-surface: #ffffff;
+  --brand-ink: #18312d;
+  --brand-muted: #55716d;
+  --brand-accent: #1f8a70;
+  --brand-accent-2: #0d5047;
+  --brand-sidebar: #14302d;
+  --brand-sidebar-text: #d8f2ea;
+  --brand-font-display: "Source Sans 3", "Segoe UI", sans-serif;
   --brand-font-body: "Source Sans 3", "Segoe UI", sans-serif;
   --brand-radius: 0.85rem;
 }
@@ -40,10 +39,10 @@ body {
   grid-template-rows: auto 1fr auto;
   color: var(--brand-surface);
   background:
-    linear-gradient(160deg, rgba(12, 18, 24, 0.55), rgba(12, 18, 24, 0.82)),
-    radial-gradient(ellipse 80% 60% at 15% 20%, rgba(42, 111, 107, 0.45), transparent 55%),
-    radial-gradient(ellipse 70% 50% at 90% 80%, rgba(196, 92, 38, 0.28), transparent 50%),
-    linear-gradient(180deg, #1a2834 0%, #0c1218 100%);
+    linear-gradient(160deg, rgba(14, 54, 49, 0.78), rgba(8, 35, 31, 0.9)),
+    radial-gradient(ellipse 80% 60% at 15% 20%, rgba(31, 138, 112, 0.45), transparent 55%),
+    radial-gradient(ellipse 70% 50% at 90% 80%, rgba(113, 190, 160, 0.28), transparent 50%),
+    linear-gradient(180deg, #1a4d45 0%, #0d2d2a 100%);
   position: relative;
   overflow: hidden;
 }
@@ -144,7 +143,7 @@ body {
 
 .btn-landing-primary {
   background: var(--brand-accent);
-  color: #fff8f3;
+  color: #fff;
 }
 
 .btn-landing-primary:hover {
@@ -178,9 +177,9 @@ body {
   right: -6%;
   top: 18%;
   background:
-    radial-gradient(circle at 35% 35%, rgba(247, 244, 239, 0.18), transparent 55%),
-    radial-gradient(circle at 70% 70%, rgba(42, 111, 107, 0.5), transparent 60%),
-    rgba(196, 92, 38, 0.15);
+    radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.18), transparent 55%),
+    radial-gradient(circle at 70% 70%, rgba(31, 138, 112, 0.5), transparent 60%),
+    rgba(31, 138, 112, 0.15);
   filter: blur(2px);
   animation: landing-drift 14s ease-in-out infinite alternate;
   pointer-events: none;
@@ -260,6 +259,20 @@ body {
   border-color: color-mix(in srgb, var(--brand-ink) 25%, transparent);
 }
 
+.category-delete-dialog {
+  width: min(32rem, calc(100% - 2rem));
+  padding: 1.5rem;
+  border: 1px solid color-mix(in srgb, var(--brand-ink) 25%, transparent);
+  border-radius: var(--brand-radius);
+  color: var(--brand-ink);
+  background: var(--brand-surface);
+  box-shadow: 0 1.25rem 4rem rgba(0, 0, 0, 0.3);
+}
+
+.category-delete-dialog::backdrop {
+  background: rgba(15, 32, 29, 0.58);
+}
+
 .auth-back {
   display: inline-block;
   margin-bottom: 1rem;
@@ -270,4 +283,93 @@ body {
 
 .auth-back:hover {
   color: var(--brand-accent);
+}
+
+.hours-page {
+  width: min(100%, 900px);
+  margin: 0 auto;
+  padding-bottom: 2rem;
+}
+
+.hours-page h1,
+.hours-page h2 {
+  color: var(--brand-ink);
+  font-weight: 700;
+}
+
+.hours-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.25rem 0;
+}
+
+.hours-summary-card,
+.hours-submission-card {
+  border: 1px solid color-mix(in srgb, var(--brand-accent-2) 22%, transparent);
+  border-radius: var(--brand-radius);
+  background: var(--brand-surface);
+  padding: 1.15rem;
+  box-shadow: 0 0.35rem 1.25rem rgba(20, 48, 45, 0.06);
+}
+
+.hours-progress {
+  height: 1rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--brand-accent-2) 14%, white);
+}
+
+.hours-progress > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--brand-accent);
+}
+
+.hours-table-wrap {
+  overflow-x: auto;
+  border-radius: 0.65rem;
+}
+
+.hours-form {
+  max-width: 760px;
+  padding: clamp(1rem, 3vw, 1.75rem);
+  border: 1px solid color-mix(in srgb, var(--brand-accent-2) 18%, transparent);
+  border-radius: var(--brand-radius);
+  background: var(--brand-surface);
+}
+
+.hours-form textarea {
+  min-height: 7rem;
+}
+
+.category-option {
+  min-height: 3.5rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--brand-ink) 18%, transparent);
+  border-radius: 0.65rem;
+  background: var(--brand-surface);
+}
+
+.category-option:has(input:checked) {
+  border-color: var(--brand-accent);
+  background: color-mix(in srgb, var(--brand-accent) 10%, white);
+}
+
+.category-option-disabled {
+  color: var(--brand-muted);
+  background: color-mix(in srgb, var(--brand-bg) 70%, white);
+}
+
+.hours-success {
+  border-color: color-mix(in srgb, var(--brand-accent) 45%, transparent);
+  background: color-mix(in srgb, var(--brand-accent) 12%, white);
+  color: var(--brand-accent-2);
+}
+
+@media (max-width: 640px) {
+  .hours-summary {
+    grid-template-columns: 1fr;
+  }
 }

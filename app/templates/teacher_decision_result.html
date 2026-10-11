@@ -1,0 +1,49 @@
+{% extends "authenticated-base.html" %}
+{% block title %}Decision Recorded{% endblock %}
+
+{% block subpage_content %}
+<main class="hours-page">
+  {% if entry.status == "verified" %}
+  <div class="alert alert-success" role="status">
+    Hours approved. They now count toward {{ student_username }}'s award progress.
+  </div>
+  {% else %}
+  <div class="alert alert-danger" role="status">
+    Hours rejected. {{ student_username }} can see the decision note on the entry.
+  </div>
+  {% endif %}
+
+  {% if entry.review_comment %}
+  <section class="hours-submission-card mb-4">
+    <strong>Decision comment:</strong> {{ entry.review_comment }}
+  </section>
+  {% endif %}
+
+  <h1 class="h5 mb-3">Remaining Pending Hours</h1>
+  <div class="hours-table-wrap">
+    <table class="table table-bordered table-hover align-middle bg-white">
+      <thead class="table-light">
+        <tr><th>Student</th><th>Date</th><th>Hours</th><th>Description</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+        {% for pending_entry, pending_username in pending_entries %}
+        <tr>
+          <td>{{ pending_username }}</td>
+          <td>{{ pending_entry.date.isoformat() }}</td>
+          <td>{{ "%.1f"|format(pending_entry.hours) }}</td>
+          <td>{{ pending_entry.description }}</td>
+          <td>
+            <a class="btn btn-sm btn-outline-primary"
+               href="{{ url_for('review_entry_view', entry_id=pending_entry.id) }}">Review</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" class="text-muted text-center py-4">No pending volunteer hours to review.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <a class="btn btn-outline-secondary mt-3" href="{{ url_for('teacher_pending_hours_view') }}">Back to Pending List</a>
+</main>
+{% endblock %}
