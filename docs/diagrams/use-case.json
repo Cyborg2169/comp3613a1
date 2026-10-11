@@ -1,0 +1,19 @@
+{
+  "system": "Student Awards",
+  "actors": [
+    {"name": "Student", "side": "left"},
+    {"name": "Teacher", "side": "right"},
+    {"name": "Admin", "side": "right"}
+  ],
+  "use_cases": [
+    {"name": "Log Volunteer Hours", "actors": ["Student"]},
+    {"name": "Verify Volunteer Hours", "actors": ["Teacher"]},
+    {
+      "name": "Nominate Student for Award",
+      "actors": ["Teacher"],
+      "includes": ["Select Award Category"]
+    },
+    {"name": "Select Award Category"},
+    {"name": "Manage Award Categories", "actors": ["Admin"]}
+  ]
+}

@@ -6,17 +6,24 @@ Do not put your student ID in this file if you will commit it. The PDF cover add
 
 ## Assigned project
 
+Student Awards
+
 ## Three workflows
 
 ### 1.
+Earn Volunteer Hours (Student)
 
 ### 2.
+Nominate Student for Award (Teacher)
 
 ### 3.
+Manage Award Categories (Admin)
 
 ## Use case diagram
 
 ![Use case diagram](diagrams/use-case.png)
+
+Phase 2 notes: “Earn Volunteer Hours” is represented as **Log Volunteer Hours**; students log entries and teachers verify them before they count toward awards. **Nominate Student for Award** includes **Select Award Category**. Use cases belong only to their named actors; no further missing use case was identified.
 
 ## Model diagram
 
@@ -24,8 +31,57 @@ First draft. Update this section in Phase 5 when polish revises the model, and n
 
 ```mermaid
 erDiagram
-  ENTITY ||--o{ OTHER : relates
+    Student {
+        int id
+        string name
+        string email
+    }
+
+    Teacher {
+        int id
+        string name
+        string email
+    }
+
+    Admin {
+        int id
+        string name
+        string email
+    }
+
+    VolunteerHours {
+        int id
+        int student_id
+        int hours
+        date date
+        string description
+        string status
+    }
+
+    AwardCategory {
+        int id
+        string name
+        string description
+        int required_hours
+    }
+
+    Nomination {
+        int id
+        int student_id
+        int teacher_id
+        int category_id
+        date date
+        string reason
+    }
+
+    Student ||--o{ VolunteerHours : logs
+    Student ||--o{ Nomination : submits
+    Teacher ||--o{ Nomination : reviews
+    AwardCategory ||--o{ Nomination : qualifies_for
+    Admin ||--o{ AwardCategory : manages
 ```
+
+Assumption: each volunteer-hour record belongs to one student; each nomination belongs to one student, one teacher, and one award category; admin manages categories but does not directly log hours or nominate students.
 
 ## Wireframes
 
