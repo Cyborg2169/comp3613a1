@@ -456,6 +456,8 @@ Phase 6. Public Render URL (not localhost). Markers open this to mark the three 
 
 https://studentawardsselector.onrender.com
 
+Demo accounts are seeded by `python manage.py init --no-drop` at startup. The Docker image now runs the same initialization before starting the app.
+
 ## Logins
 
 Every account a marker needs, including extra users you added. Starter accounts:
