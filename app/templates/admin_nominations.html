@@ -1,0 +1,54 @@
+{% extends "authenticated-base.html" %}
+{% block title %}Review Nominations{% endblock %}
+
+{% block subpage_content %}
+<main class="hours-page">
+  <h1 class="h3 mb-3">Review Nominations</h1>
+  <p class="text-muted">Approve eligible nominations to award the category, or reject them.</p>
+
+  <div class="hours-table-wrap">
+    <table class="table table-bordered table-hover align-middle bg-white">
+      <thead class="table-light">
+        <tr><th>Student</th><th>Category</th><th>Date</th><th>Reason</th><th>Status</th><th>Decision</th></tr>
+      </thead>
+      <tbody>
+        {% for nomination, student_username, category_name in nominations %}
+        <tr>
+          <td>{{ student_username }}</td>
+          <td>{{ category_name }}</td>
+          <td>{{ nomination.date.isoformat() }}</td>
+          <td>{{ nomination.reason }}</td>
+          <td>
+            {% if nomination.status == "approved" %}
+            <span class="badge rounded-pill text-bg-success">Awarded</span>
+            {% elif nomination.status == "rejected" %}
+            <span class="badge rounded-pill text-bg-danger">Rejected</span>
+            {% else %}
+            <span class="badge rounded-pill text-bg-warning">{{ nomination.status|title }}</span>
+            {% endif %}
+          </td>
+          <td class="text-nowrap">
+            {% if nomination.status == "submitted" %}
+            <form method="post" action="{{ url_for('admin_nomination_decision_action', nomination_id=nomination.id) }}"
+                  class="d-inline">
+              <input type="hidden" name="decision" value="approved">
+              <button class="btn btn-sm btn-success" type="submit">Approve</button>
+            </form>
+            <form method="post" action="{{ url_for('admin_nomination_decision_action', nomination_id=nomination.id) }}"
+                  class="d-inline">
+              <input type="hidden" name="decision" value="rejected">
+              <button class="btn btn-sm btn-outline-danger" type="submit">Reject</button>
+            </form>
+            {% else %}
+            <span class="text-muted">Reviewed</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" class="text-muted text-center py-4">No nominations yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</main>
+{% endblock %}

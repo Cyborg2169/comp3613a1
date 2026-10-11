@@ -79,6 +79,7 @@ def migrate_nomination_schema() -> None:
             "date": "DATE",
             "reason": "VARCHAR",
             "status": "VARCHAR DEFAULT 'submitted'",
+            "reviewer_id": 'INTEGER REFERENCES "user"(id)',
         }
         for name, definition in additions.items():
             if name not in existing_columns:

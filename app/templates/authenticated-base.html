@@ -91,6 +91,13 @@
             </li>
             {% elif user.role == "admin" %}
             <li class="nav-item">
+                <a class="nav-link d-flex align-items-center {{ 'active' if request.url.path.startswith('/admin/nominations') }}"
+                   href="{{ url_for('admin_nominations_view') }}">
+                    <span class="material-symbols-outlined me-2">task_alt</span>
+                    Review Nominations
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link d-flex align-items-center {{ 'active' if request.url.path.startswith('/admin/categories') }}"
                    href="{{ url_for('admin_categories_view') }}">
                     <span class="material-symbols-outlined me-2">workspace_premium</span>

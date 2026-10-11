@@ -28,6 +28,28 @@
     </div>
   </section>
 
+  <section class="mb-4" aria-label="My awards">
+    <h2 class="h5 mb-2">My Awards</h2>
+    <div class="hours-table-wrap">
+      <table class="table table-bordered align-middle bg-white mb-0">
+        <thead class="table-light">
+          <tr><th>Awarded category</th><th>Nomination date</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          {% for nomination, category_name in awards %}
+          <tr>
+            <td>{{ category_name }}</td>
+            <td>{{ nomination.date.isoformat() }}</td>
+            <td><span class="badge rounded-pill text-bg-success">Awarded</span></td>
+          </tr>
+          {% else %}
+          <tr><td colspan="3" class="text-muted text-center py-3">No awards yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
   <div class="d-flex justify-content-between align-items-center gap-3 mb-2">
     <h2 class="h5 mb-0">My Hours</h2>
     <a class="btn btn-primary" href="{{ url_for('log_volunteer_hours_view') }}">+ Log New Hours</a>

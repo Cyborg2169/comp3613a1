@@ -68,6 +68,7 @@ erDiagram
         int student_id
         int teacher_id
         int category_id
+        int reviewer_id "nullable"
         date date
         string reason
         string status
@@ -86,6 +87,7 @@ Assumption: students, teachers, and admins use the existing account (`User`) wit
 Phase 5 implementation mapping: volunteer-hour entries link to the signed-in FastStarter `User` account (`VolunteerHours.user_id`) rather than introducing a duplicate student account table. The optional supervisor / organisation and review fields shown or selected for verification are stored on `VolunteerHours`.
 
 Phase 5 Nomination decisions: use the separate category selector first and preselect the confirmed category on the nomination form; only categories whose required hours are met by verified hours can be submitted; allow only one nomination per student/category; new nominations store status `submitted` (displayed as “Submitted”). The wireframe category tiers are seeded as Bronze Service (20 hours), Silver Service (50), and Gold Service (100).
+Phase 5 follow-up polish: admins can approve or reject submitted nominations; approved categories appear as awards on the student's hours dashboard. The admin reviewer is recorded on the nomination. The student reports verifying both admin decisions locally and seeing the approved award on Bob's dashboard.
 
 ## Wireframes
 
@@ -448,6 +450,79 @@ architecture_ok: yes
 implement_confidence: 0.78
 passed: yes
 note: Built a VolunteerHours entry from the submitted values, preserved pending status, and delegated persistence to the repository.
+-->
+
+<!-- student-build:code-check
+workflow: Admin Review Student Award Nominations
+form: choice
+layer: other
+architecture_ok: yes
+implement_confidence: 0.78
+passed: yes
+note: Chose Admin as the nomination reviewer.
+-->
+<!-- student-build:code-check
+workflow: Admin Review Student Award Nominations
+form: choice
+layer: other
+architecture_ok: yes
+implement_confidence: 0.78
+passed: yes
+note: Chose to allow both approval and rejection.
+-->
+<!-- student-build:code-check
+workflow: Admin Review Student Award Nominations
+form: choice
+layer: other
+architecture_ok: yes
+implement_confidence: 0.78
+passed: yes
+note: Chose to show approved awards on the student dashboard.
+-->
+<!-- student-build:code-check
+workflow: Admin Review Student Award Nominations
+form: mcq
+layer: service
+architecture_ok: yes
+implement_confidence: 0.78
+passed: yes
+note: Correctly placed the approval/rejection decision in the service layer.
+-->
+<!-- student-build:code-check
+workflow: Admin Review Student Award Nominations
+form: snippet
+layer: model
+architecture_ok: yes
+implement_confidence: 0.38
+passed: no
+note: Reviewer foreign-key attempt remained misindented after a second pass; Guide corrected it.
+-->
+<!-- student-build:code-check
+workflow: Admin Review Student Award Nominations
+form: snippet
+layer: router
+architecture_ok: yes
+implement_confidence: 0.38
+passed: partial
+note: Attempt called a service without constructing it and used an undefined admin name; Guide completed the thin route.
+-->
+<!-- student-build:code-check
+workflow: Admin Review Student Award Nominations
+form: snippet
+layer: repository
+architecture_ok: yes
+implement_confidence: 0.38
+passed: yes
+note: Loaded the nomination, recorded its decision and reviewer, and committed in the repository.
+-->
+<!-- student-build:code-check
+workflow: Admin Review Student Award Nominations
+form: snippet
+layer: service
+architecture_ok: yes
+implement_confidence: 0.38
+passed: no
+note: Attempt added a nested duplicate method with invalid indentation; Guide corrected the service implementation.
 -->
 
 ## Deployed app

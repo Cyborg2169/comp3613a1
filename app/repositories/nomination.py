@@ -112,3 +112,40 @@ class NominationRepository:
             )
         )
         return self.db.exec(statement).one_or_none()
+
+    def record_decision(
+        self, nomination_id: int, decision: str, reviewer_id: int
+    ) -> Nomination | None:
+        nomination = self.db.get(Nomination, nomination_id)
+        if nomination is None or nomination.status != "submitted":
+            return None
+        nomination.status = decision
+        nomination.reviewer_id = reviewer_id
+        self.db.commit()
+        self.db.refresh(nomination)
+        return nomination
+
+    def list_for_admin(
+        self,
+    ) -> list[tuple[Nomination, str, str]]:
+        statement = (
+            select(Nomination, User.username, AwardCategory.name)
+            .join(User, User.id == Nomination.student_id)
+            .join(AwardCategory, AwardCategory.id == Nomination.category_id)
+            .order_by(Nomination.date.desc(), Nomination.id.desc())
+        )
+        return list(self.db.exec(statement).all())
+
+    def list_approved_for_student(
+        self, student_id: int
+    ) -> list[tuple[Nomination, str]]:
+        statement = (
+            select(Nomination, AwardCategory.name)
+            .join(AwardCategory, AwardCategory.id == Nomination.category_id)
+            .where(
+                Nomination.student_id == student_id,
+                Nomination.status == "approved",
+            )
+            .order_by(Nomination.date.desc(), Nomination.id.desc())
+        )
+        return list(self.db.exec(statement).all())

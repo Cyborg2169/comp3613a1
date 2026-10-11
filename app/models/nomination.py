@@ -24,3 +24,5 @@ class Nomination(SQLModel, table=True):
     reason: str
     status: str = "submitted"
     # STUDENT SNIPPET END
+
+    reviewer_id: Optional[int] = Field(default=None, foreign_key="user.id")
