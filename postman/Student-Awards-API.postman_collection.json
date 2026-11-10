@@ -1,0 +1,404 @@
+{
+  "info": {
+    "_postman_id": "f804e3a8-3752-4c5d-82c5-a19d11b994e5",
+    "name": "Student Awards API",
+    "description": "Smoke tests for the Student Awards HTTP API and role-protected workflows. Start the app with `python manage.py run`; the collection uses the local base URL and seeded demo accounts by default.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:5000"
+    },
+    {
+      "key": "studentUsername",
+      "value": "bob"
+    },
+    {
+      "key": "studentPassword",
+      "value": "bobpass"
+    },
+    {
+      "key": "teacherUsername",
+      "value": "teacher"
+    },
+    {
+      "key": "teacherPassword",
+      "value": "teacherpass"
+    },
+    {
+      "key": "hoursDate",
+      "value": "2026-11-10"
+    },
+    {
+      "key": "hoursValue",
+      "value": "2.5"
+    },
+    {
+      "key": "hoursDescription",
+      "value": "Postman hours smoke test"
+    },
+    {
+      "key": "supervisor",
+      "value": "Community Garden"
+    },
+    {
+      "key": "entryId",
+      "value": ""
+    }
+  ],
+  "protocolProfileBehavior": {
+    "followRedirects": false
+  },
+  "item": [
+    {
+      "name": "Health check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/health"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('returns HTTP 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "pm.test('reports a healthy application', function () {",
+              "  pm.expect(pm.response.json()).to.deep.equal({ ok: true });",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "List users (public response fields only)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/users"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('returns HTTP 200 with a JSON array', function () {",
+              "  pm.response.to.have.status(200);",
+              "  pm.expect(pm.response.json()).to.be.an('array');",
+              "});",
+              "pm.test('does not expose account passwords', function () {",
+              "  pm.response.json().forEach(function (user) {",
+              "    pm.expect(user).to.have.property('id');",
+              "    pm.expect(user).to.have.property('username');",
+              "    pm.expect(user).to.have.property('email');",
+              "    pm.expect(user).not.to.have.property('password');",
+              "  });",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Student hours and teacher approval",
+      "item": [
+        {
+          "name": "Student login",
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          },
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "{{studentUsername}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{studentPassword}}",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": "{{baseUrl}}/login"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('student login redirects to the student area', function () {",
+                  "  pm.response.to.have.status(303);",
+                  "  pm.expect(pm.response.headers.get('Location')).to.include('/app');",
+                  "});",
+                  "pm.test('student login sets the authentication cookie', function () {",
+                  "  pm.expect(pm.response.headers.get('Set-Cookie')).to.include('access_token=');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Submit volunteer hours",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('hoursDate', new Date().toISOString().slice(0, 10));",
+                  "pm.collectionVariables.set('hoursDescription', 'Postman hours smoke test ' + Date.now());"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('hours submission succeeds and remains pending', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  pm.expect(pm.response.text()).to.include('Hours submitted successfully');",
+                  "  pm.expect(pm.response.text()).to.include('Pending teacher verification');",
+                  "  pm.expect(pm.response.text()).to.include(pm.collectionVariables.get('hoursDescription'));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "entry_date",
+                  "value": "{{hoursDate}}",
+                  "type": "text"
+                },
+                {
+                  "key": "hours",
+                  "value": "{{hoursValue}}",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "{{hoursDescription}}",
+                  "type": "text"
+                },
+                {
+                  "key": "supervisor",
+                  "value": "{{supervisor}}",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": "{{baseUrl}}/app/hours"
+          }
+        },
+        {
+          "name": "Teacher login",
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          },
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "{{teacherUsername}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{teacherPassword}}",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": "{{baseUrl}}/login"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('teacher login redirects to the teacher queue', function () {",
+                  "  pm.response.to.have.status(303);",
+                  "  pm.expect(pm.response.headers.get('Location')).to.include('/teacher/hours');",
+                  "});",
+                  "pm.test('teacher login sets the authentication cookie', function () {",
+                  "  pm.expect(pm.response.headers.get('Set-Cookie')).to.include('access_token=');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Find submitted hours in teacher queue",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/teacher/hours?query={{studentUsername}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('teacher queue contains the submitted entry', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const body = pm.response.text();",
+                  "  const description = pm.collectionVariables.get('hoursDescription');",
+                  "  const descriptionIndex = body.indexOf(description);",
+                  "  pm.expect(descriptionIndex, 'submitted description').to.be.above(-1);",
+                  "  const rowStart = body.lastIndexOf('<tr', descriptionIndex);",
+                  "  const rowEnd = body.indexOf('</tr>', descriptionIndex);",
+                  "  pm.expect(rowStart, 'entry table row').to.be.above(-1);",
+                  "  pm.expect(rowEnd, 'entry table row end').to.be.above(rowStart);",
+                  "  const row = body.slice(rowStart, rowEnd);",
+                  "  const link = row.match(/href\\s*=\\s*[\"']([^\"']+)[\"']/i);",
+                  "  pm.expect(link, 'review link for submitted entry').not.to.be.null;",
+                  "  const path = link[1].split(/[?#]/, 1)[0].replace(/\\/+$/, '');",
+                  "  const idMatch = path.match(/\\/teacher\\/hours\\/(\\d+)$/);",
+                  "  pm.expect(idMatch, 'numeric entry id in review link').not.to.be.null;",
+                  "  pm.collectionVariables.set('entryId', idMatch[1]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Approve submitted hours",
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          },
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "decision",
+                  "value": "approve",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": "{{baseUrl}}/teacher/hours/{{entryId}}/review"
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const entryId = pm.collectionVariables.get('entryId');",
+                  "if (!/^\\d+$/.test(String(entryId || ''))) {",
+                  "  throw new Error('Cannot approve hours: entryId was not extracted from the teacher queue.');",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('teacher approval redirects to the decision result', function () {",
+                  "  pm.response.to.have.status(303);",
+                  "  pm.expect(pm.response.headers.get('Location')).to.include('/teacher/hours/' + pm.collectionVariables.get('entryId') + '/result');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Student login for role check",
+          "protocolProfileBehavior": {
+            "followRedirects": false
+          },
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "{{studentUsername}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{studentPassword}}",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": "{{baseUrl}}/login"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('student login succeeds before the role check', function () {",
+                  "  pm.response.to.have.status(303);",
+                  "  pm.expect(pm.response.headers.get('Set-Cookie')).to.include('access_token=');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Student is forbidden from teacher queue",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/teacher/hours"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('student receives HTTP 403 for the teacher queue', function () {",
+                  "  pm.response.to.have.status(403);",
+                  "  pm.expect(pm.response.json().detail).to.eql('Teacher access is required');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
