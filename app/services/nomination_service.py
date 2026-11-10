@@ -90,20 +90,14 @@ class NominationService:
     ) -> tuple[Nomination, str, str] | None:
         return self.repository.get_submission(nomination_id, teacher_id)
 
-    def review_nomination(
-        self, nomination_id: int, decision: str, reviewer_id: int
-    ) -> Nomination:
+    def review_nomination(self, nomination_id: int, decision: str, reviewer_id: int):
         if decision not in ("approved", "rejected"):
             raise ValueError("Decision must be approved or rejected")
-        nomination = self.repository.record_decision(
-            nomination_id, decision, reviewer_id
-        )
+        nomination = self.repository.record_decision(nomination_id, decision, reviewer_id)
         if nomination is None:
-            raise ValueError("Nomination not found or already reviewed")
+            raise ValueError("Nomination not found")
         return nomination
-
-    def list_for_admin(self) -> list[tuple[Nomination, str, str]]:
-        return self.repository.list_for_admin()
+        # STUDENT APPROVAL SERVICE SNIPPET END
 
     def list_approved_for_student(
         self, student_id: int

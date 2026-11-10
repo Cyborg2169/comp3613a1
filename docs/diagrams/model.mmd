@@ -1,0 +1,45 @@
+erDiagram
+    User {
+        int id PK
+        string username UK
+        string email UK
+        string password
+        string role
+    }
+
+    VolunteerHours {
+        int id PK
+        int user_id FK
+        float hours
+        date date
+        string description
+        string status
+        string supervisor
+        string review_comment
+        int reviewed_by_id FK "nullable"
+    }
+
+    AwardCategory {
+        int id PK
+        string name UK
+        string description
+        int required_hours "greater than zero"
+    }
+
+    Nomination {
+        int id PK
+        int student_id FK
+        int teacher_id FK
+        int category_id FK
+        int reviewer_id FK "nullable"
+        date date
+        string reason
+        string status
+    }
+
+    User ||--o{ VolunteerHours : logs
+    User o|--o{ VolunteerHours : reviews
+    User ||--o{ Nomination : student
+    User ||--o{ Nomination : teacher
+    User o|--o{ Nomination : reviews
+    AwardCategory ||--o{ Nomination : selected_for

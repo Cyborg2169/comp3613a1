@@ -25,4 +25,6 @@ class Nomination(SQLModel, table=True):
     status: str = "submitted"
     # STUDENT SNIPPET END
 
+    # STUDENT APPROVAL MODEL SNIPPET START
     reviewer_id: Optional[int] = Field(default=None, foreign_key="user.id")
+    # STUDENT APPROVAL MODEL SNIPPET END
