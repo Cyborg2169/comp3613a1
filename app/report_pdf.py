@@ -124,7 +124,7 @@ class ReportPDF(FPDF):
             self.set_text_color(255, 255, 255)
             self.set_font("Body", "B", 20)
             self.set_xy(self.l_margin, 9)
-            self.cell(self.epw, 10, "COMP 3613 Assignment 1")
+            self.cell(self.epw, 10, "COMP 3613 Assignment 2")
             self.set_font("Body", "", 11)
             self.set_xy(self.l_margin, 20)
             subtitle = "Individual report (incomplete)" if self.incomplete else "Individual report"
@@ -136,7 +136,7 @@ class ReportPDF(FPDF):
         self.set_y(10)
         self.set_font("Body", "", 9)
         self.set_text_color(*NAVY)
-        self.cell(self.epw, 6, "COMP 3613 Assignment 1", new_x="LMARGIN", new_y="NEXT")
+        self.cell(self.epw, 6, "COMP 3613 Assignment 2", new_x="LMARGIN", new_y="NEXT")
         self.ln(1.5)
         self.set_draw_color(*GOLD)
         self.set_line_width(0.5)
@@ -187,7 +187,7 @@ def export_report(
     if not src.is_file():
         src.parent.mkdir(parents=True, exist_ok=True)
         src.write_text(
-            "# COMP 3613 Assignment 1\n\nDraft. Export is allowed at any stage.\n",
+            "# COMP 3613 Assignment 2\n\nDraft. Export is allowed at any stage.\n",
             encoding="utf-8",
         )
         print(f"Created {src} (empty draft).")
@@ -969,7 +969,7 @@ def _blocks(markdown: str) -> list[tuple]:
             blocks.append(("image", image.group(1).strip()))
             i += 1
             continue
-        heading = re.match(r"^(#{1,3})\s+(.+)$", line)
+        heading = re.match(r"^(#{1,6})\s+(.+)$", line)
         if heading:
             flush()
             blocks.append(("heading", len(heading.group(1)), heading.group(2).strip()))
