@@ -6,7 +6,7 @@ From the project root (venv active, deps installed; ``.env`` optional — falls 
     python manage.py init
     python manage.py run
     python manage.py users
-    python manage.py report --name "Student Name" --id "816000000"
+    python manage.py report --name "Student Name" --id "816000000" --email "student@example.edu"
     python manage.py usecase
     python manage.py skills-verify
 """
@@ -156,6 +156,7 @@ def cmd_report(args: argparse.Namespace) -> None:
     result = export_report(
         name=args.name,
         student_id=args.student_id,
+        account_email=args.account_email,
         source=None if args.src is None else Path(args.src),
         output=None if args.output is None else Path(args.output),
     )
@@ -299,6 +300,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_report.add_argument("--name", required=True, help="Student name (printed on the PDF cover)")
     p_report.add_argument("--id", dest="student_id", required=True, help="Student ID (PDF only)")
+    p_report.add_argument(
+        "--email",
+        dest="account_email",
+        default="",
+        help="Account email (printed on the PDF cover)",
+    )
     p_report.add_argument("--src", default=None, help="Markdown path (default: docs/report.md)")
     p_report.add_argument("--output", default=None, help="PDF path (default: docs/report.pdf)")
     p_report.set_defaults(func=cmd_report)

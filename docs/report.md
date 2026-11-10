@@ -590,80 +590,86 @@ Index: [docs/transcripts/INDEX.md](transcripts/INDEX.md)
 
 Filled by Guide from the student-judge run when this report was built.
 
-**Student / session:** Student Awards project
-**Artifact:** current project artefacts (`docs/report.md`, `docs/diagrams/`, `docs/wireframes/`) and reconstructed Guide transcript summaries in `docs/transcripts/`
+**Judged at:** 2026-11-10T19:43:22-03:00
+**Student / session:** Raymond Sookdeo / Student Awards
+**Artifact:** Current conversation, current `docs/report.md`, all current diagrams and wireframes, and the seven Guide-written markdown summaries in `docs/transcripts/`
 **Phases in evidence:** 1–6 (COMP 3613; Phase 5 polish, Phase 6 deploy; never generic 0–5)
-
-**Judged at:** 2026-10-12T19:21:30Z
-**Evidence pass:** re-read current docs/report.md plus the transcript summary files in docs/transcripts/; no native Guide chat history was directly readable in this environment, so the transcript set is a reconstruction from the project artefacts and report metadata
+**Evidence pass:** Re-read the current report, diagrams, wireframes, all seven transcript summaries, and this conversation. The transcript summaries state that historical native chats were unavailable and are reconstructions; no matching local or cloud project sessions surfaced in the current history query. Prior `judge.md` and prior report scorecards were ignored.
 
 ### Totals
+
 | | Count / value |
 |--|--|
 | Metrics on rubric | 12 (M1–M12) |
 | N/A (excluded) | 0 |
 | Metrics scored | 12 |
 | Scoreable max | 48 |
-| Awarded total | 46 / 48 |
-| **Overall (avg of scored)** | **3.83 / 4** |
-| Impression mark | 19 / 20 |
+| Awarded total | 41 / 48 |
+| **Overall (avg of scored)** | **3.42 / 4** |
+| Impression mark | 17 / 20 |
 
 ## Scorecard
 
 | ID | Metric | Score / 4 | In avg | Evidence |
 |----|--------|----------:|:------:|----------|
-| M1 | Phase discipline | 4 | yes | Project, workflows, ERD, wireframes, and Phase 5 polish are all reflected in the report and deployment sections; the report clearly distinguishes the phase progression and deployment timing. |
-| M2 | Problem framing | 4 | yes | Student Awards, three named workflows, use-case interpretation, and the project framing are all explicit in the report and diagrams. |
-| M3 | Decision ownership | 4 | yes | The report documents the student’s decisions on model assumptions, role ownership, verification steps, category rules, and local workflow checks. |
-| M4 | Artefact-before-code | 4 | yes | ERD and wireframe files are present and the implementation notes align to them; the app was built against those artefacts rather than an unrelated product. |
-| M5 | Verification habit | 3 | yes | The report includes explicit local verification notes and reported observations against the wireframes. The evidence is solid but not a full browser-by-browser final walkthrough of every flow. |
-| M6 | Assignment fit | 4 | yes | The report demonstrates theme work, layered implementation logic, workflow-by-workflow completion, and a proper deployed app URL; no architecture red flag is evident in the recorded notes. |
-| M7 | Slice explanation | 3 | yes | The report contains route/service/repository checks and implementation notes that explain workflow logic and architecture decisions. |
-| M8 | Prompt quality | 4 | yes | Phase-tagged sections and concise workflow notes are present throughout the report and transcript summaries. |
-| M9 | Response to pushback | 4 | yes | The project shows iterative model and workflow revisions, including local polish and status updates, rather than accepting the first build pass uncritically. |
-| M10 | Integrity | 4 | yes | No evidence of edited skills or malicious report manipulation; the material shows a coherent build trail and a complete project record. |
-| M11 | Provenance continuity | 4 | yes | The workflow decisions and model revisions follow the same project thread from Phase 1 through deployment. |
-| M12 | Sincerity trajectory | 4 | yes | No suspicion blocks were present in the accessible evidence; the project record is consistent and self-explanatory. |
+| M1 | Phase discipline | 3 | yes | The report lays out the use-case/model/wireframe gates and has Phase 5 implementation/polish before a Phase 6 URL; reconstructed earlier transcripts limit direct process verification. |
+| M2 | Problem framing | 3 | yes | The report names Student Awards and three workflows: “Earn Volunteer Hours (Student),” “Nominate Student for Award (Teacher),” and “Manage Award Categories (Admin).” |
+| M3 | Decision ownership | 3 | yes | The report records student-owned decisions about the shared User model, teacher-only queue, rejection comments, and category rules; the reconstructed histories do not provide full turn-by-turn quotes. |
+| M4 | Artefact-before-code | 4 | yes | The current report contains a UML use-case diagram, Mermaid ERD, wireframe coverage for the named flows, and a Phase 5 model revision; the images show the same documented volunteer-hours, nomination, and category workflows. |
+| M5 | Verification habit | 4 | yes | The student reported “all 13 tests in postman” and “all 5 UAT tests” passed; the report records unit/integration results and embeds their test/UAT evidence. |
+| M6 | Assignment fit | 4 | yes | Reported implementation follows the layers: pending filtering in the repository, repeat-review rules in the service, and user-facing errors in the route; route search found no inline SQL/query operations. |
+| M7 | Slice explanation | 3 | yes | The report contains Phase 5 code-check records and implementation decisions, including service/repository layering; reconstructed transcripts limit direct assessment of verbal explanations. |
+| M8 | Prompt quality | 3 | yes | The student gave specific failures and expected outcomes for Postman redirects/cookies and duplicate approval, then specified exact report updates and requested the restored screenshot. |
+| M9 | Response to pushback | 4 | yes | The student returned with failing assertions and duplicate-review behavior rather than accepting them; later reported the 13-test and five-UAT passes and restored a missing earlier-run screenshot. |
+| M10 | Integrity | 3 | yes | No paste-back or skill-edit flag appears in accessible evidence; report skill integrity is `pass`, but earlier native conversations were unavailable for full inspection. |
+| M11 | Provenance continuity | 3 | yes | The current changes remain tied to the same Student Awards volunteer-hours workflow, collection, and report evidence; older phase links rely on reconstructions. |
+| M12 | Sincerity trajectory | 4 | yes | No suspicion flags or sincerity rounds appear in the accessible summaries or current conversation; the current student turns describe concrete test outcomes and requested corrections. |
 
 ## Strengths
-- Clear project selection and named workflow framing: Student Awards with three core workflows.
-- Strong artefact coverage: use-case diagram, ERD, wireframes, theming, implementation notes, and deployment information are all in the report.
-- Good Phase 5 polish evidence: the report includes role-based workflows, status handling, badge refinements, and model revisions rather than a one-pass build.
-- Solid end-state documentation: deployed URL, login credentials, and YouTube demo link are all included.
-- The evidence shows a coherent progression from design to deploy without obvious process drift.
+
+- The project report includes three role-specific workflows, a UML use-case diagram, an ERD, and wireframes that cover their main screens.
+- Phase 5 notes document workflow verification and student-requested polish rather than stopping at an initial build.
+- The repeated-approval issue was handled with repository/service/route responsibilities kept separate and regression coverage documented.
+- The student reported passing API and UAT runs and requested that both current and restored Postman evidence remain in the report.
 
 ## Gaps (priority order)
-1. No direct native chat history was available in this environment; the transcript set was reconstructed from the report and project artefacts. This is not a process failure in the project, but it does limit verbatim transcript depth.
+
+1. Earlier native Guide chats could not be opened in the current evidence pass. The phase transcript files explicitly describe themselves as reconstructions, so direct evidence of earlier-phase ownership and sincerity is limited.
 
 ## Phase gate status
+
 | Phase | Status | Note |
 |-------|--------|------|
-| 1 | met | Project and three workflows are clearly named and documented. |
-| 2 | met | Use-case diagram and report notes are present. |
-| 3 | met | ERD and model assumptions are documented. |
-| 4 | met | Wireframes are embedded and coverage comments are included. |
-| 5 | met | Theming, build, polish, and workflow verification are documented; local polish is clearly present. |
-| 6 | met | Render URL and seed logins are in the report and the app is documented as deployed. |
+| 1 | met | The project and at least three role-aware workflows are documented. |
+| 2 | met | UML use-case image and actor/use-case notes are present. |
+| 3 | met | ERD, business constraints, and Phase 5 revision are documented. |
+| 4 | met | Named workflows have embedded wireframes and coverage notes. |
+| 5 | met | Theming, implementation, local verification, and student-directed polish are documented. |
+| 6 | met | Public Render URL and marker logins are present in the report. |
 
 ## Recommended next practice
-- Keep the report and transcript package as the primary evidence bundle; when a future judge pass reopens this project, re-read the native chats if they become available and replace this reconstructed summary with the live transcript logs.
+
+- Keep validating workflow invariants at multiple levels, as in the second-review regression covering queue visibility and the verified total.
 
 ## Integrity note
-- Clean
-- No evidence of external-lLM laundering or edited skills in the accessible record.
+
+- Clean based on accessible evidence. No external-assist or skill-editing flag was found; native history unavailability limits certainty.
 
 ## Provenance flags
-- None in current evidence.
+
+- Earlier native Guide chats were not readable during this pass; phase summaries are reconstructions from report/artifact evidence.
 
 ## Sincerity log summary
-- Blocks found: 0
-- max round: N/A
-- min/mean/final confidence: N/A
-- trend: N/A
-- cleared: N/A
+
+- Blocks found: 0 in accessible evidence
+- Max round: N/A
+- Min/mean/final confidence: N/A
+- Trend: N/A
+- Cleared: N/A (no suspicion round)
 
 ## Skips
-- Skips: not visible in accessible evidence
+
+- Skips: 0/3 used in accessible evidence; reconstructed earlier-phase summaries do not record a skip.
 
 ## Skill integrity
 
@@ -672,7 +678,6 @@ Course skills are hashed at export and compared to `.agents/skills.lock.json`. D
 - Status: **pass**
 - Root: `e84cd692d0b85eefe546385661958c27d07e8be6c5176a82012f68ccff5c8beb`
 - none
-
 ## Test plans
 
 ### Unit test plan
@@ -716,10 +721,10 @@ Automated tests are run from the repository root with `python -m pytest`. The in
 
 | Evidence | Status |
 | --- | --- |
-| Unit-test CLI result screenshot | Capture the passing `python -m pytest -q tests/test_services.py` output in the terminal and attach it to the final PDF. |
-| Integration-test CLI result screenshot | Capture the passing `python -m pytest -q tests/test_integration.py` output in the terminal and attach it to the final PDF. |
-| Postman collection run screenshot | Import [`Student-Awards-API.postman_collection.json`](../postman/Student-Awards-API.postman_collection.json), set `baseUrl` to the running app, run the collection, and attach the passing results in the final PDF. |
-| UAT execution report | The UAT cases above are a plan only; record tester, date, Pass/Fail, and observations after a person completes each browser task. No manual UAT result is claimed here. |
+| Unit-test CLI result screenshot | Pass — see `diagrams/unit-tests.png` (21 passed). |
+| Integration-test CLI result screenshot | Pass — see `diagrams/integration-test.png` (7 passed). |
+| Postman collection run screenshot | Pass — see `diagrams/poastman-2-run-test.png` (13 passed, 0 failed). |
+| UAT execution report | All five UATs passed on 2026-11-10; desired outcomes were achieved. Screenshots are embedded below. |
 
 Automated test results:
 
@@ -727,15 +732,59 @@ Automated test results:
 | --- | --- | --- |
 | Unit | `python -m pytest -q tests/test_services.py` | 21 passed |
 | Integration | `python -m pytest -q tests/test_integration.py` | 7 passed |
+| API (Postman) | Student-Awards-API collection run | 13 of 13 request tests passed (reported 2026-11-10) |
+| User acceptance | UAT-01 through UAT-05 | 5 of 5 passed (2026-11-10); desired outcome achieved for each test |
 
 Both pytest commands emitted one Starlette/httpx deprecation warning from the installed test-client dependency; neither suite failed. The tests exposed and led to a fix for the missing `NominationService.list_approved_for_student` delegation used by the student dashboard. The Postman Collection Runner run passed: 13 of 13 requests' tests passed.
 
-UAT execution record — complete after the browser tasks above:
+UAT execution record — all results were reported as passing on 2026-11-10, with the desired outcome achieved for each test:
 
 | UAT ID | Result (Pass / Fail / Not run) | Tester and date | Observations / evidence |
 | --- | --- | --- | --- |
-| UAT-01 | Not run |  |  |
-| UAT-02 | Not run |  |  |
-| UAT-03 | Not run |  |  |
-| UAT-04 | Not run |  |  |
-| UAT-05 | Not run |  |  |
+| UAT-01 | Pass | Raymond Sookdeo, 2026-11-10 | Desired outcome achieved; submitted 2.5 hours appear as pending. See screenshot below. |
+| UAT-02 | Pass | Raymond Sookdeo, 2026-11-10 | Desired outcome achieved; approved hours leave the pending queue and count as 2.5 verified hours. See screenshots below. |
+| UAT-03 | Pass | Raymond Sookdeo, 2026-11-10 | Desired outcome achieved; rejection requires a comment and rejected hours do not add to the verified total. See screenshots below. |
+| UAT-04 | Pass | Raymond Sookdeo, 2026-11-10 | Desired outcome achieved; nomination is submitted and a duplicate nomination is blocked. See screenshots below. |
+| UAT-05 | Pass | Raymond Sookdeo, 2026-11-10 | Desired outcome achieved; category creation and editing work, and referenced categories cannot be deleted. See screenshots below. |
+
+#### Test-run screenshots
+
+![Unit test run — 21 passed](diagrams/unit-tests.png)
+
+![Integration test run — 7 passed](diagrams/integration-test.png)
+
+![Postman collection run — 13 passed, 0 failed](diagrams/poastman-2-run-test.png)
+
+The earlier Postman screenshot is also retained for context; it shows the initial 4-check collection run.
+
+![Earlier Postman run — 4 checks passed](diagrams/first%20postman%20test%204%20check.png)
+
+#### UAT screenshots
+
+##### UAT-01 — Submit volunteer hours
+
+![UAT-01: 2.5 volunteer hours submitted with pending status](UAT_test1/tes1.png)
+
+##### UAT-02 — Approve volunteer hours
+
+![UAT-02: teacher approval result with no remaining pending hours](UAT_Test3/test3.png)
+
+![UAT-02: student dashboard shows 2.5 verified hours](UAT_Test3/test33.png)
+
+##### UAT-03 — Reject volunteer hours
+
+![UAT-03: rejection without a comment is blocked](UAT_test2/test2.png)
+
+![UAT-03: student dashboard shows rejected hours outside the verified total](UAT_test2/test22.png)
+
+##### UAT-04 — Nominate a student
+
+![UAT-04: nomination submitted successfully](UAT_Test4/test4.png)
+
+![UAT-04: duplicate nomination is blocked](UAT_Test4/test44.png)
+
+##### UAT-05 — Manage award categories
+
+![UAT-05: new award category created](UAT_Test5/test5.png)
+
+![UAT-05: award category updated](UAT_Test5/test55.png)

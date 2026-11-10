@@ -1,4 +1,4 @@
-"""Export docs/report.md to a PDF with the student's name and ID on the cover."""
+"""Export docs/report.md to a PDF with student identity details on the cover."""
 
 from __future__ import annotations
 
@@ -11,6 +11,7 @@ import subprocess
 import tempfile
 from dataclasses import dataclass
 from pathlib import Path
+from urllib.parse import unquote
 
 from fpdf import FPDF, FontFace, TextStyle
 from fpdf.html import HTML2FPDF
@@ -169,6 +170,7 @@ def export_report(
     *,
     name: str,
     student_id: str,
+    account_email: str = "",
     source: Path | None = None,
     output: Path | None = None,
 ) -> ReportExportResult:
@@ -177,6 +179,7 @@ def export_report(
     dest = output or DEFAULT_PDF
     clean_name = name.strip()
     clean_id = student_id.strip()
+    clean_email = account_email.strip()
     if not clean_name or not clean_id:
         raise SystemExit("Report export needs both --name and --id.")
 
@@ -232,7 +235,15 @@ def export_report(
 
     pdf = _new_pdf(bool(missing))
     with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
-        cover = _cover_html(clean_name, clean_id, app_url, logins, integrity, missing)
+        cover = _cover_html(
+            clean_name,
+            clean_id,
+            clean_email,
+            app_url,
+            logins,
+            integrity,
+            missing,
+        )
         body = _markdown_to_html(markdown, src.parent, Path(tmp))
         appendix = _markdown_to_html(
             appendix_markdown(transcripts),
@@ -580,6 +591,7 @@ def _write_report_html(pdf: ReportPDF, markup: str) -> None:
 def _cover_html(
     name: str,
     student_id: str,
+    account_email: str,
     app_url: str,
     logins: str,
     integrity: IntegrityResult,
@@ -595,6 +607,7 @@ def _cover_html(
     rows = [
         ("Student name", html_lib.escape(name), False),
         ("Student ID", html_lib.escape(student_id), False),
+        ("Account email", html_lib.escape(account_email) or "Not provided", False),
         ("Deployed app", html_lib.escape(app_url), False),
         ("Logins", login_html, False),
         ("Skill integrity", integrity_value, not integrity.ok),
@@ -998,7 +1011,7 @@ def _blocks(markdown: str) -> list[tuple]:
 def _resolve(raw: str, base: Path) -> Path | None:
     """Resolve an image path from report-relative, repo-root, or docs/-prefixed forms."""
     candidates: list[Path] = []
-    path = Path(raw)
+    path = Path(unquote(raw))
     if path.is_absolute():
         candidates.append(path)
     else:
@@ -1045,18 +1058,22 @@ def _render_mermaid(source: str, png: Path) -> bool:
     mmd = png.with_suffix(".mmd")
     mmd.write_text(source, encoding="utf-8")
     commands: list[list[str]] = []
+    puppeteer_args = _puppeteer_config_args(png)
+    render_args = ["-i", str(mmd), "-o", str(png), "-b", "white", *puppeteer_args]
+    node = shutil.which("node")
+    cli = REPO_ROOT / "node_modules" / "@mermaid-js" / "mermaid-cli" / "src" / "cli.js"
+    if node and cli.is_file():
+        commands.append([node, str(cli), *render_args])
     local_name = "mmdc.cmd" if os.name == "nt" else "mmdc"
     local = REPO_ROOT / "node_modules" / ".bin" / local_name
-    if local.is_file():
-        commands.append([str(local), "-i", str(mmd), "-o", str(png), "-b", "white"])
+    if local.is_file() and not (node and cli.is_file()):
+        commands.append([str(local), *render_args])
     mmdc = shutil.which("mmdc")
     if mmdc:
-        commands.append([mmdc, "-i", str(mmd), "-o", str(png), "-b", "white"])
+        commands.append([mmdc, *render_args])
     npx = shutil.which("npx")
     if npx:
-        commands.append(
-            [npx, "--yes", _mermaid_cli_spec(), "-i", str(mmd), "-o", str(png), "-b", "white"]
-        )
+        commands.append([npx, "--yes", _mermaid_cli_spec(), *render_args])
     for cmd in commands:
         try:
             subprocess.run(cmd, check=True, timeout=180, capture_output=True)
@@ -1065,3 +1082,37 @@ def _render_mermaid(source: str, png: Path) -> bool:
         if png.is_file():
             return True
     return False
+
+
+def _puppeteer_config_args(png: Path) -> list[str]:
+    executable = os.environ.get("PUPPETEER_EXECUTABLE_PATH")
+    candidates = [
+        shutil.which("chrome"),
+        shutil.which("msedge"),
+        shutil.which("chromium"),
+        shutil.which("chromium-browser"),
+    ]
+    if os.name == "nt":
+        for root in (
+            os.environ.get("ProgramFiles"),
+            os.environ.get("ProgramFiles(x86)"),
+            os.environ.get("LOCALAPPDATA"),
+        ):
+            if root:
+                candidates.extend(
+                    [
+                        str(Path(root) / "Google" / "Chrome" / "Application" / "chrome.exe"),
+                        str(Path(root) / "Microsoft" / "Edge" / "Application" / "msedge.exe"),
+                    ]
+                )
+    if not executable:
+        executable = next((candidate for candidate in candidates if candidate and Path(candidate).is_file()), None)
+    if not executable or not Path(executable).is_file():
+        return []
+
+    config = png.with_name(f"{png.stem}.puppeteer.json")
+    config.write_text(
+        json.dumps({"executablePath": executable, "args": []}),
+        encoding="utf-8",
+    )
+    return ["-p", str(config)]

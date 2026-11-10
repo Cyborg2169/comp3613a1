@@ -1,10 +1,10 @@
 # student-judge competency report
 
-**Judged at:** 2026-11-10T18:43:30-03:00
+**Judged at:** 2026-11-10T19:43:22-03:00
 **Student / session:** Raymond Sookdeo / Student Awards
-**Artifact:** Current Postman and regression-testing chat, current `docs/report.md`, diagrams, wireframes, and the seven markdown summaries in `docs/transcripts/`
+**Artifact:** Current conversation, current `docs/report.md`, all current diagrams and wireframes, and the seven Guide-written markdown summaries in `docs/transcripts/`
 **Phases in evidence:** 1–6 (COMP 3613; Phase 5 polish, Phase 6 deploy; never generic 0–5)
-**Evidence pass:** Re-read live current chat and current project artefacts; queried all sessions for this workspace. Historical Copilot CLI sessions were listed but returned no readable turns; their existing transcript summaries are reconstructions and are treated as secondary evidence. Prior `judge.md` and prior report competency scores were ignored.
+**Evidence pass:** Re-read the current report, diagrams, wireframes, all seven transcript summaries, and this conversation. The transcript summaries state that historical native chats were unavailable and are reconstructions; no matching local or cloud project sessions surfaced in the current history query. Prior `judge.md` and prior report scorecards were ignored.
 
 ### Totals
 
@@ -18,56 +18,56 @@
 | **Overall (avg of scored)** | **3.42 / 4** |
 | Impression mark | 17 / 20 |
 
-### Scorecard
+## Scorecard
 
 | ID | Metric | Score / 4 | In avg | Evidence |
 |----|--------|----------:|:------:|----------|
-| M1 | Phase discipline | 3 | yes | The report documents the design artefacts, workflow-by-workflow Phase 5, polish, and later Phase 6 URL. Historical phase conversations are not readable for a direct process check. |
+| M1 | Phase discipline | 3 | yes | The report lays out the use-case/model/wireframe gates and has Phase 5 implementation/polish before a Phase 6 URL; reconstructed earlier transcripts limit direct process verification. |
 | M2 | Problem framing | 3 | yes | The report names Student Awards and three workflows: “Earn Volunteer Hours (Student),” “Nominate Student for Award (Teacher),” and “Manage Award Categories (Admin).” |
-| M3 | Decision ownership | 3 | yes | The report attributes decisions about the shared User model, teacher-only queue, rejection comments, and category rules to the student; historical chat summaries prevent quote-level verification. |
-| M4 | Artefact-before-code | 4 | yes | The report contains a use-case diagram, ERD, and wireframe coverage for the implemented workflows; implementation notes track those artifacts rather than a substitute product. |
-| M5 | Verification habit | 4 | yes | The report says the student “reports running and checking the flow against the three wireframes and says it matches,” and records follow-up badge and category-validation polish. The current conversation adds a reported Postman run and targeted regression-test request. |
-| M6 | Assignment fit | 4 | yes | The report's per-workflow `student-build:code-check` blocks record architecture-respecting snippets (`architecture_ok: yes`); current source uses repository filtering, service review rules, and a thin route that displays service errors. |
-| M7 | Slice explanation | 3 | yes | The report records model and thin-route attempts, including a service-delegation signature correction; for nomination review it also records partial model/route attempts followed by a repository snippet. |
-| M8 | Prompt quality | 3 | yes | The project record uses phase-tagged prompts and concrete mismatch reports. In this chat the student gave reproducible Postman and duplicate-review failures with expected results. |
-| M9 | Response to pushback | 4 | yes | The report records that the student requested distinct Pending/Verified badges and confirmed the refinement; the current chat continues with cookie-test and duplicate-review regressions rather than accepting failing results. |
-| M10 | Integrity | 3 | yes | No paste-back or edited-skill flag was found in the accessible evidence; `.agents/skills.lock.json` integrity in the report is marked pass. Older native turns were unavailable, limiting certainty. |
-| M11 | Provenance continuity | 3 | yes | The project artifacts, workflow notes, and current Postman/regression requests stay on the same Student Awards volunteer-hours flow. Historical continuity is supported by reconstructed summaries. |
-| M12 | Sincerity trajectory | 4 | yes | No suspicion blocks or laundering flags appear in the accessible evidence; the current messages are specific, incremental test observations. Older native turns were unavailable. |
+| M3 | Decision ownership | 3 | yes | The report records student-owned decisions about the shared User model, teacher-only queue, rejection comments, and category rules; the reconstructed histories do not provide full turn-by-turn quotes. |
+| M4 | Artefact-before-code | 4 | yes | The current report contains a UML use-case diagram, Mermaid ERD, wireframe coverage for the named flows, and a Phase 5 model revision; the images show the same documented volunteer-hours, nomination, and category workflows. |
+| M5 | Verification habit | 4 | yes | The student reported “all 13 tests in postman” and “all 5 UAT tests” passed; the report records unit/integration results and embeds their test/UAT evidence. |
+| M6 | Assignment fit | 4 | yes | Reported implementation follows the layers: pending filtering in the repository, repeat-review rules in the service, and user-facing errors in the route; route search found no inline SQL/query operations. |
+| M7 | Slice explanation | 3 | yes | The report contains Phase 5 code-check records and implementation decisions, including service/repository layering; reconstructed transcripts limit direct assessment of verbal explanations. |
+| M8 | Prompt quality | 3 | yes | The student gave specific failures and expected outcomes for Postman redirects/cookies and duplicate approval, then specified exact report updates and requested the restored screenshot. |
+| M9 | Response to pushback | 4 | yes | The student returned with failing assertions and duplicate-review behavior rather than accepting them; later reported the 13-test and five-UAT passes and restored a missing earlier-run screenshot. |
+| M10 | Integrity | 3 | yes | No paste-back or skill-edit flag appears in accessible evidence; report skill integrity is `pass`, but earlier native conversations were unavailable for full inspection. |
+| M11 | Provenance continuity | 3 | yes | The current changes remain tied to the same Student Awards volunteer-hours workflow, collection, and report evidence; older phase links rely on reconstructions. |
+| M12 | Sincerity trajectory | 4 | yes | No suspicion flags or sincerity rounds appear in the accessible summaries or current conversation; the current student turns describe concrete test outcomes and requested corrections. |
 
 ## Strengths
 
-- The project record shows all three named workflows, a model, use-case diagram, and matching wireframes before implementation.
-- Phase 5 evidence includes verification notes and concrete polish decisions, rather than only accepting the first build.
-- The hours workflow preserves the layered structure: pending-state filtering in the repository, review-state rules in the service, and user-facing error rendering in the route.
-- The student reported Postman failures with concrete expected behavior and requested regression coverage for repeated approval and hour totals.
+- The project report includes three role-specific workflows, a UML use-case diagram, an ERD, and wireframes that cover their main screens.
+- Phase 5 notes document workflow verification and student-requested polish rather than stopping at an initial build.
+- The repeated-approval issue was handled with repository/service/route responsibilities kept separate and regression coverage documented.
+- The student reported passing API and UAT runs and requested that both current and restored Postman evidence remain in the report.
 
 ## Gaps (priority order)
 
-1. Historical native Guide chats could not be opened: workspace session metadata was available, but prior Copilot CLI transcripts returned no turns. Existing summaries are reconstructions, so ownership and sincerity for Phases 1–6 have less direct evidence than a full live transcript.
+1. Earlier native Guide chats could not be opened in the current evidence pass. The phase transcript files explicitly describe themselves as reconstructions, so direct evidence of earlier-phase ownership and sincerity is limited.
 
 ## Phase gate status
 
 | Phase | Status | Note |
 |-------|--------|------|
-| 1 | met | Project and three workflows are documented. |
-| 2 | met | Use-case diagram and actor/use-case notes are present. |
-| 3 | met | The ERD and model revisions are documented. |
-| 4 | met | Workflow wireframes are present and embedded with coverage notes. |
-| 5 | met | Theme, implementation, local verification, and student-directed polish are documented. |
-| 6 | met | The report contains a public Render URL and marker logins. |
+| 1 | met | The project and at least three role-aware workflows are documented. |
+| 2 | met | UML use-case image and actor/use-case notes are present. |
+| 3 | met | ERD, business constraints, and Phase 5 revision are documented. |
+| 4 | met | Named workflows have embedded wireframes and coverage notes. |
+| 5 | met | Theming, implementation, local verification, and student-directed polish are documented. |
+| 6 | met | Public Render URL and marker logins are present in the report. |
 
 ## Recommended next practice
 
-- Keep testing workflow invariants at both service and integration levels; the repeated-approval test is a good example of checking state, queue visibility, and downstream totals together.
+- Keep validating workflow invariants at multiple levels, as in the second-review regression covering queue visibility and the verified total.
 
 ## Integrity note
 
-- Clean based on accessible evidence. No external-assist or skill-editing flag was found; historical chat unavailability limits certainty.
+- Clean based on accessible evidence. No external-assist or skill-editing flag was found; native history unavailability limits certainty.
 
 ## Provenance flags
 
-- Historical native Copilot CLI sessions were listed but not readable; current session and project artifacts were readable.
+- Earlier native Guide chats were not readable during this pass; phase summaries are reconstructions from report/artifact evidence.
 
 ## Sincerity log summary
 
@@ -79,4 +79,4 @@
 
 ## Skips
 
-- Skips: 0/3 used in accessible evidence; older reconstructed phase summaries do not record a skip.
+- Skips: 0/3 used in accessible evidence; reconstructed earlier-phase summaries do not record a skip.
